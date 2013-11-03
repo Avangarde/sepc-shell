@@ -19,7 +19,7 @@
 #error "Variante non défini !!"
 #endif
 
-void lancerCommande (char **seq) {
+void lancerCommande (char **seq, int bg) {
 	pid_t pid;
 	switch( pid = fork() ) {
 		case -1:
@@ -32,7 +32,8 @@ void lancerCommande (char **seq) {
 		default:
 		  { 
 			int status;
-			waitpid(pid, &status, 0);
+			if (!bg)
+				waitpid(pid, &status, 0);
 			break;
 		  }
 	}
@@ -74,7 +75,7 @@ int main() {
 			printf("\n");
 		}
 		
-		lancerCommande(*l->seq);
+		lancerCommande(*l->seq, l->bg);
 		
 	}
 	

@@ -22,26 +22,6 @@ variante.h
 readcmd.h
 /home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
 
-/home/edward/Documents/SEPC/sepc-shell/src/readcmd.c
-stdio.h
--
-stddef.h
--
-stdlib.h
--
-errno.h
--
-limits.h
--
-string.h
--
-readcmd.h
-/home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
-readline/readline.h
--
-readline/history.h
--
-
 /home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
 
 /home/edward/Documents/SEPC/sepc-shell/src/variante.h
