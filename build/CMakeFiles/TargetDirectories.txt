@@ -1,1 +1,1 @@
-/home/edward/Documents/SEPC/ensimag-shell/build/CMakeFiles/ensishell.dir
+/home/edward/Documents/SEPC/sepc-shell/build/CMakeFiles/ensishell.dir
