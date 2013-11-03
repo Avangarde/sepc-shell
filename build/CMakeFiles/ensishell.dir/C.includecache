@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/edward/Documents/SEPC/ensimag-shell/src/ensishell.c
+stdio.h
+-
+stdlib.h
+-
+variante.h
+/home/edward/Documents/SEPC/ensimag-shell/src/variante.h
+readcmd.h
+/home/edward/Documents/SEPC/ensimag-shell/src/readcmd.h
+
+/home/edward/Documents/SEPC/ensimag-shell/src/readcmd.c
+stdio.h
+-
+stddef.h
+-
+stdlib.h
+-
+errno.h
+-
+limits.h
+-
+string.h
+-
+readcmd.h
+/home/edward/Documents/SEPC/ensimag-shell/src/readcmd.h
+readline/readline.h
+-
+readline/history.h
+-
+
+/home/edward/Documents/SEPC/ensimag-shell/src/readcmd.h
+
+/home/edward/Documents/SEPC/ensimag-shell/src/variante.h
+

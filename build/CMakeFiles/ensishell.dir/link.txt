@@ -1,0 +1,1 @@
+/usr/bin/gcc  -g -Wall -Werror -std=gnu99    CMakeFiles/ensishell.dir/src/readcmd.c.o CMakeFiles/ensishell.dir/src/ensishell.c.o  -o ensishell -rdynamic -lreadline -lhistory 
