@@ -10,20 +10,23 @@ void visualiser (Liste L) {
 	} else {
 		int i,j = 1;
 		pid_t pid;
-		Liste aux = L;
-		while (!estVide(aux)) {
+		Liste aux = calloc(1,sizeof(*aux));
+		aux->suivant = L;
+		while (!estVide(aux->suivant)) {
 			printf("[%i] \t %i \t", j, aux->pid);
-			pid = waitpid (aux->pid, NULL, WNOHANG);
-			if (pid > 0) {
-				printf("Fini");
-				eliminerDeListe(aux);
-			} else {
-				printf("En cours d'exécution");
-			}
-			for (i=0; aux->commande[i]!=0; i++) {
+			for (i=0; aux->suivant->commande[i]!=0; i++) {
 				printf("%s ", commande[i]);
             }
-            aux = aux->suivant;
+			pid = waitpid (aux->suivant->pid, NULL, WNOHANG);
+			if (pid > 0) {
+				printf("\tFini");
+				delete = aux->suivant;
+				aux->suiv = aux->suiv->suiv;
+				eliminerDeListe(delete);
+			} else {
+				printf("\tEn cours d'exécution");
+				aux = aux->suivant;
+			}
             printf("\n");
 		}
 	}
@@ -31,4 +34,16 @@ void visualiser (Liste L) {
 
 int estVide(Liste L) { 
 	return L == NULL; 
+}
+
+int eliminerDeListe(Liste tache){
+	char ** elimine = tache->command;
+	int i;
+	char *suppr = elimine[0];
+	for(i = 1; suppr != 0; i++) {
+		free(suppr);
+		suppr = elimine[i];
+	}
+	free(elimine);
+	return 1;
 }

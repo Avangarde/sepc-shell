@@ -19,14 +19,14 @@
 #error "Variante non défini !!"
 #endif
 
-void lancerCommande (char **seq, int bg) {
+void lancerCommande (char ***seq, int bg) {
 	pid_t pid;
 	switch( pid = fork() ) {
 		case -1:
 			perror("fork:");
 			break;
 		case 0:
-			execvp(seq[0], seq);
+			execvp(*seq[0], *seq);
 			perror("execvp:");
 			break;
 		default:
@@ -75,7 +75,7 @@ int main() {
 			printf("\n");
 		}
 		
-		lancerCommande(*l->seq, l->bg);
+		lancerCommande(l->seq, l->bg);
 		
 	}
 	
