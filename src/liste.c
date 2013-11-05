@@ -32,3 +32,22 @@ void visualiser (Liste L) {
 int estVide(Liste L) { 
 	return L == NULL; 
 }
+
+int ajouterAuFond(int pid, char **commande, Liste l){
+
+	Liste nouvelleProc;
+	nouvelleProc->pid = pid;
+	nouvelleProc->commande = commande;
+	nouvelleProc->suivant = NULL;
+	
+	if(estVide(l)){
+		l = nouvelleProc;
+		return 0;
+	}
+	
+	while (l->suivant!=NULL){
+		l = l->suivant;
+	}
+	l->suivant = nouvelleProc;
+	return 0;
+}
