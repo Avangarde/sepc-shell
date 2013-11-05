@@ -19,7 +19,19 @@
 #error "Variante non défini !!"
 #endif
 
+
+Liste processus;
+
 void lancerCommande (char **seq, int bg) {
+	//Pas testé
+	if(seq[0] == 'quit'){
+		exit(0);
+	}
+	
+	if(seq[0] == 'jobs'){
+		visualiser(processus);
+	}
+	
 	pid_t pid;
 	switch( pid = fork() ) {
 		case -1:
@@ -32,8 +44,12 @@ void lancerCommande (char **seq, int bg) {
 		default:
 		  { 
 			int status;
-			if (!bg)
+			if (!bg){
 				waitpid(pid, &status, 0);
+			}else{
+			//Pas testé
+			ajouterAuFond(pid, seq, processus);	
+				}
 			break;
 		  }
 	}

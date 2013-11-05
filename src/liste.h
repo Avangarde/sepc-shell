@@ -4,7 +4,7 @@
 struct Liste{
     pid_t pid;
     char **commande;
-    struct Liste * suivante;         
+    struct Liste * suivant;         
 };
 
 void visualizer(Liste l);
