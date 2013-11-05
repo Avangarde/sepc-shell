@@ -7,6 +7,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 #include "variante.h"
 #include "readcmd.h"
@@ -14,6 +18,26 @@
 #ifndef VARIANTE
 #error "Variante non défini !!"
 #endif
+
+void lancerCommande (char **seq, int bg) {
+	pid_t pid;
+	switch( pid = fork() ) {
+		case -1:
+			perror("fork:");
+			break;
+		case 0:
+			execvp(seq[0], seq);
+			perror("execvp:");
+			break;
+		default:
+		  { 
+			int status;
+			if (!bg)
+				waitpid(pid, &status, 0);
+			break;
+		  }
+	}
+}
 
 int main() {
         printf("Variante %d: %s\n", VARIANTE, VARIANTE_STRING);
@@ -50,5 +74,9 @@ int main() {
                         }
 			printf("\n");
 		}
+		
+		lancerCommande(*l->seq, l->bg);
+		
 	}
+	
 }

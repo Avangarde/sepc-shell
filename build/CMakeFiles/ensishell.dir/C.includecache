@@ -6,37 +6,22 @@
 
 #IncludeRegexTransform: 
 
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/ensishell.c
+/home/edward/Documents/SEPC/sepc-shell/src/ensishell.c
 stdio.h
 -
 stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/wait.h
 -
 variante.h
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/variante.h
+/home/edward/Documents/SEPC/sepc-shell/src/variante.h
 readcmd.h
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/readcmd.h
+/home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
 
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/readcmd.c
-stdio.h
--
-stddef.h
--
-stdlib.h
--
-errno.h
--
-limits.h
--
-string.h
--
-readcmd.h
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/readcmd.h
-readline/readline.h
--
-readline/history.h
--
+/home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
 
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/readcmd.h
-
-/home/sparrow/Documents/SEPC/shell/sepc-shell/src/variante.h
-
+/home/edward/Documents/SEPC/sepc-shell/src/variante.h
