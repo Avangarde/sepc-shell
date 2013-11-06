@@ -416,7 +416,6 @@ int eliminerDeListe(Liste tache){
 }
 
 Liste ajouterAuFond(int pid, char **commande, Liste l){
-	printf("ici");
 	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));
 	nouvelleProc->pid = pid;
 	nouvelleProc->commande = xmalloc(sizeof(char *));
@@ -424,16 +423,16 @@ Liste ajouterAuFond(int pid, char **commande, Liste l){
 	nouvelleProc->suivant = NULL;
 	
 	//commande
-	/*
+	
 	size_t temp = 0;
 	int i;
 	
 	for(i = 0; commande[i] != 0; i++){
-		nouvelleProc->commande = xrealloc(l->commande, (temp + 2) * sizeof(char *));
+		//nouvelleProc->commande = xrealloc(l->commande, (temp + 2) * sizeof(char *));
         nouvelleProc->commande[temp]= xmalloc( (strlen(commande[i])+1) * sizeof(char)); 
         strcpy(nouvelleProc->commande[temp++],commande[i]);        
         nouvelleProc->commande[temp] = 0;
-	} */
+	} 
 	
 	if(estVide(l)){
 		l = nouvelleProc;

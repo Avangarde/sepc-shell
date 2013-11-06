@@ -23,9 +23,9 @@
 Liste processus;
 
 void lancerCommande (char ***seq, int bg) {
-	//Pas testé
 	char **commande = seq[0];
-	if(strcmp(commande[0],"quit") == 0){
+	if(strcmp(commande[0],"quit") == 0
+	   || strcmp(commande[0],"exit") == 0){
 		exit(0);
 	}
 	
@@ -48,7 +48,6 @@ void lancerCommande (char ***seq, int bg) {
 				if (!bg){
 					waitpid(pid, &status, 0);
 				}else{
-					//Pas testé
 					printf("Processus en tache de fond: %i\n", pid);
 					processus = ajouterAuFond(pid, seq[0], processus);
 				}
