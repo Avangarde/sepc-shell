@@ -364,9 +364,10 @@ error:
 	return s;
 }
 
-void visualiser (Liste L) {
+Liste visualiser (Liste L) {
 	if (estVide(L)) {
 		printf("Pas des processus en tâche de fond\n");
+		return NULL;
 	} else {
 		int i,j = 1;
 		pid_t pid;
@@ -392,8 +393,9 @@ void visualiser (Liste L) {
             printf("\n");
             j++;
 		}
-		free(aux);
 		L = aux->suivant;
+		free(aux);
+		return L;
 	}
 }
 
@@ -414,21 +416,24 @@ int eliminerDeListe(Liste tache){
 }
 
 Liste ajouterAuFond(int pid, char **commande, Liste l){
-	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));;
+	printf("ici");
+	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));
 	nouvelleProc->pid = pid;
-//	nouvelleProc->commande = commande;
+	nouvelleProc->commande = xmalloc(sizeof(char *));
+	nouvelleProc->commande[0] = 0;
 	nouvelleProc->suivant = NULL;
 	
 	//commande
-	
+	/*
 	size_t temp = 0;
+	int i;
 	
-	for(int i = 0; commande[i] != 0; i++){
+	for(i = 0; commande[i] != 0; i++){
 		nouvelleProc->commande = xrealloc(l->commande, (temp + 2) * sizeof(char *));
-        	nouvelleProc->commande[temp]= xmalloc( (strlen(commande[i])+1) * sizeof(char)); 
-        	strcpy(nouvelleProc->commande[temp++],commande[i]);        
-        	nouvelleProc->commande[temp] = 0;
-	}
+        nouvelleProc->commande[temp]= xmalloc( (strlen(commande[i])+1) * sizeof(char)); 
+        strcpy(nouvelleProc->commande[temp++],commande[i]);        
+        nouvelleProc->commande[temp] = 0;
+	} */
 	
 	if(estVide(l)){
 		l = nouvelleProc;

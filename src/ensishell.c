@@ -30,7 +30,7 @@ void lancerCommande (char ***seq, int bg) {
 	}
 	
 	if(strcmp(commande[0],"jobs") == 0){
-		visualiser(processus);
+		processus = visualiser(processus);
 	}
 	else {
 		pid_t pid;

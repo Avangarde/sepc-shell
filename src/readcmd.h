@@ -46,7 +46,7 @@ typedef struct Liste{
     struct Liste * suivant;         
 } *Liste;
 
-void visualiser(Liste l);
+Liste visualiser(Liste l);
 
 Liste ajouterAuFond(int pid, char **commande, Liste l);
 

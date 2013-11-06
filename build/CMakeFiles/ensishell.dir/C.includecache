@@ -6,6 +6,24 @@
 
 #IncludeRegexTransform: 
 
+/home/edward/Documents/SEPC/sepc-shell/src/ensishell.c
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/wait.h
+-
+string.h
+-
+variante.h
+/home/edward/Documents/SEPC/sepc-shell/src/variante.h
+readcmd.h
+/home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
+
 /home/edward/Documents/SEPC/sepc-shell/src/readcmd.c
 stdio.h
 -
@@ -33,4 +51,6 @@ readline/history.h
 /home/edward/Documents/SEPC/sepc-shell/src/readcmd.h
 sys/types.h
 -
+
+/home/edward/Documents/SEPC/sepc-shell/src/variante.h
 
