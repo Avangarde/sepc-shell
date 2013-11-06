@@ -8,7 +8,7 @@
 /*
  * changelog: add background, 2010, Grégory Mounié
  */
-
+#include <sys/types.h>
 #ifndef __READCMD_H
 #define __READCMD_H
 
@@ -39,4 +39,19 @@ A sequence is an array of commands (char ***), whose last item is a null
 pointer.
 When the user enters an empty line, seq[0] is NULL.
 */
+
+typedef struct Liste{
+    pid_t pid;
+    char **commande;
+    struct Liste * suivant;         
+} *Liste;
+
+void visualiser(Liste l);
+
+int ajouterAuFond(int pid, char **commande, Liste l);
+
+int eliminerDeListe(Liste l);
+
+int estVide(Liste l);
+
 #endif

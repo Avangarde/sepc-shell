@@ -12,6 +12,8 @@
 #include <errno.h>
 #include <limits.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "readcmd.h"
 
 #ifdef USE_GNU_READLINE
@@ -360,4 +362,68 @@ error:
 		s->out = 0;
 	}
 	return s;
+}
+
+void visualiser (Liste L) {
+	if (estVide(L)) {
+		printf("Pas des processus en tâche de fond\n");
+	} else {
+		int i,j = 1;
+		pid_t pid;
+		Liste aux = calloc(1,sizeof(*aux));
+		aux->suivant = L;
+		while (!estVide(aux->suivant)) {
+			printf("[%i] \t %i \t", j, aux->pid);
+			for (i=0; aux->suivant->commande[i]!=0; i++) {
+				printf("%s ", aux->suivant->commande[i]);
+            }
+			pid = waitpid (aux->suivant->pid, NULL, WNOHANG);
+			if (pid > 0) {
+				printf("\tFini");
+				Liste delete = aux->suivant;
+				aux->suivant = aux->suivant->suivant;
+				eliminerDeListe(delete);
+				free(delete);
+			} else {
+				printf("\tEn cours d'exécution");
+				aux = aux->suivant;
+			}
+            printf("\n");
+		}
+	}
+}
+
+int estVide(Liste L) { 
+	return L == NULL; 
+}
+
+int eliminerDeListe(Liste tache){
+	char ** elimine = tache->commande;
+	int i;
+	char *suppr = elimine[0];
+	for(i = 1; suppr != 0; i++) {
+		free(suppr);
+		suppr = elimine[i];
+	}
+	free(elimine);
+	return 1;
+}
+
+int ajouterAuFond(int pid, char **commande, Liste l){
+
+	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));;
+	nouvelleProc->pid = pid;
+	nouvelleProc->commande = commande;
+	nouvelleProc->suivant = NULL;
+	
+	if(estVide(l)){
+		l = nouvelleProc;
+		return 0;
+	}
+	
+	while (l->suivant!=NULL){
+		l = l->suivant;
+	}
+	l->suivant = nouvelleProc;
+	return 0;
 }

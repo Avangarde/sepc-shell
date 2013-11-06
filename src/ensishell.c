@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 
 #include "variante.h"
@@ -19,23 +20,40 @@
 #error "Variante non défini !!"
 #endif
 
+Liste processus;
+
 void lancerCommande (char ***seq, int bg) {
-	pid_t pid;
-	switch( pid = fork() ) {
-		case -1:
-			perror("fork:");
-			break;
-		case 0:
-			execvp(*seq[0], *seq);
-			perror("execvp:");
-			break;
-		default:
-		  { 
-			int status;
-			if (!bg)
-				waitpid(pid, &status, 0);
-			break;
-		  }
+	//Pas testé
+	char **commande = seq[0];
+	if(strcmp(commande[0],"quit") == 0){
+		exit(0);
+	}
+	
+	if(strcmp(commande[0],"jobs") == 0){
+		visualiser(processus);
+	}
+	else {
+		pid_t pid;
+		switch( pid = fork() ) {
+			case -1:
+				perror("fork:");
+				break;
+			case 0:
+				execvp(*seq[0], *seq);
+				perror("execvp:");
+				break;
+			default:
+			  { 
+				int status;
+				if (!bg){
+					waitpid(pid, &status, 0);
+				}else{
+					//Pas testé
+					ajouterAuFond(pid, seq[0], processus);	
+				}
+				break;
+			  }
+		}
 	}
 }
 
