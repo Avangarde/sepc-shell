@@ -49,7 +49,8 @@ void lancerCommande (char ***seq, int bg) {
 					waitpid(pid, &status, 0);
 				}else{
 					//Pas testé
-					ajouterAuFond(pid, seq[0], processus);	
+					printf("Processus en tache de fond: %i\n", pid);
+					processus = ajouterAuFond(pid, seq[0], processus);
 				}
 				break;
 			  }

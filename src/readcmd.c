@@ -371,25 +371,29 @@ void visualiser (Liste L) {
 		int i,j = 1;
 		pid_t pid;
 		Liste aux = calloc(1,sizeof(*aux));
-		aux->suivant = L;
-		while (!estVide(aux->suivant)) {
-			printf("[%i] \t %i \t", j, aux->pid);
-			for (i=0; aux->suivant->commande[i]!=0; i++) {
-				printf("%s ", aux->suivant->commande[i]);
+		Liste parcours = aux;
+		parcours->suivant = L;
+		while (!estVide(parcours->suivant)) {
+			printf("[%i] \t %i \t", j, (parcours->suivant)->pid);
+			for (i=0; (parcours->suivant)->commande[i]!=0; i++) {
+				printf("%s ", (parcours->suivant)->commande[i]);
             }
-			pid = waitpid (aux->suivant->pid, NULL, WNOHANG);
+			pid = waitpid ((parcours->suivant)->pid, NULL, WNOHANG);
 			if (pid > 0) {
 				printf("\tFini");
-				Liste delete = aux->suivant;
-				aux->suivant = aux->suivant->suivant;
+				Liste delete = parcours->suivant;
+				parcours->suivant = parcours->suivant->suivant;
 				eliminerDeListe(delete);
 				free(delete);
 			} else {
 				printf("\tEn cours d'exécution");
-				aux = aux->suivant;
+				parcours = parcours->suivant;
 			}
             printf("\n");
+            j++;
 		}
+		free(aux);
+		L = aux->suivant;
 	}
 }
 
@@ -409,8 +413,7 @@ int eliminerDeListe(Liste tache){
 	return 1;
 }
 
-int ajouterAuFond(int pid, char **commande, Liste l){
-
+Liste ajouterAuFond(int pid, char **commande, Liste l){
 	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));;
 	nouvelleProc->pid = pid;
 	nouvelleProc->commande = commande;
@@ -418,12 +421,11 @@ int ajouterAuFond(int pid, char **commande, Liste l){
 	
 	if(estVide(l)){
 		l = nouvelleProc;
-		return 0;
+		return l;
 	}
-	
 	while (l->suivant!=NULL){
 		l = l->suivant;
 	}
 	l->suivant = nouvelleProc;
-	return 0;
+	return l;
 }

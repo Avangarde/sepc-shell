@@ -48,7 +48,7 @@ typedef struct Liste{
 
 void visualiser(Liste l);
 
-int ajouterAuFond(int pid, char **commande, Liste l);
+Liste ajouterAuFond(int pid, char **commande, Liste l);
 
 int eliminerDeListe(Liste l);
 
