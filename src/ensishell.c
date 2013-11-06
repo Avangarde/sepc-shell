@@ -22,13 +22,14 @@
 
 Liste processus;
 
-void lancerCommande (char **seq, int bg) {
-	//Pas testé
-	if(seq[0] == 'quit'){
+void lancerCommande (char ***seq, int bg) {
+	char **commande = seq[0];
+		//Pas testé
+	if(strcmp(commande[0], "quit"){
 		exit(0);
 	}
 	
-	if(seq[0] == 'jobs'){
+	if(strcmp(commande[0], "jobs"){
 		visualiser(processus);
 	}
 	
