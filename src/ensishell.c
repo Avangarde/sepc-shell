@@ -23,38 +23,80 @@
 Liste processus;
 
 void lancerCommande (char ***seq, int bg) {
-	char **commande = seq[0];
-	if(strcmp(commande[0],"quit") == 0
-	   || strcmp(commande[0],"exit") == 0){
-		exit(0);
-	}
-	
-	if(strcmp(commande[0],"jobs") == 0){
-		processus = visualiser(processus);
-	}
-	else {
-		pid_t pid;
-		switch( pid = fork() ) {
-			case -1:
-				perror("fork:");
-				break;
-			case 0:
-				execvp(*seq[0], *seq);
-				perror("execvp:");
-				break;
-			default:
-			  { 
-				int status;
-				if (!bg){
-					waitpid(pid, &status, 0);
-				}else{
-					printf("Processus en tache de fond: %i\n", pid);
-					processus = ajouterAuFond(pid, seq[0], processus);
-				}
-				break;
-			  }
+	//Variables PIPE
+	int tuyau[2];
+	//tuyau[0]: lire... ecrire sur l'autre
+	pipe(tuyau);
+
+	//Ici il manque le trc pour faire la lecture du pipe bien si nest pas selement le premier
+	int s;
+	for (s = 0; seq[s]!=0;s++){
+		char **commande = seq[s];
+		if(strcmp(commande[0],"quit") == 0
+		   || strcmp(commande[0],"exit") == 0){
+			exit(0);
 		}
-	}
+	
+		if(strcmp(commande[0],"jobs") == 0){
+			processus = visualiser(processus);
+		}
+		else {
+			pid_t pid;
+			switch( pid = fork() ) {
+				case -1:
+					perror("fork:");
+					break;
+				case 0:
+					
+					//Est-ce que je suis la premiere sequence?
+					
+					if(s==0){
+					
+					//Est-ce que je suis l'unique sequence
+					printf("Je suis lunique");
+					
+						dup2(tuyau[1],1);
+						//Attention, est qu'il faut fermer l'ecriture avant de fermer la lecture?
+						close(tuyau[0]);
+						close(tuyau[1]);
+					
+					}
+					
+					
+					//Est-ce que je suis la deuxieme sequence?
+				
+					if(s==1){
+					
+						dup2(tuyau[0],0);
+						close(tuyau[0]);
+						close(tuyau[1]);
+					
+						//Gestion du fichier			
+					}
+				
+					execvp(commande[0], commande);
+					perror("execvp:");
+					break;
+				default:
+				  { 
+					int status;
+					if (!bg){
+						waitpid(pid, &status, 0);
+					}else{
+						printf("Processus en tache de fond: %i\n", pid);
+						processus = ajouterAuFond(pid, seq[0], processus);
+					}
+					break;
+				  }
+			}
+		}
+		}
+		
+		
+		//Verifier avant de sortir que les pipes sont fermes
+		close(tuyau[0]);
+		close(tuyau[1]);
+		
 }
 
 int main() {
@@ -98,3 +140,4 @@ int main() {
 	}
 	
 }
+
