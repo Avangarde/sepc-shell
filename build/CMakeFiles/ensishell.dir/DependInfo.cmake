@@ -4,8 +4,8 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_C
-  "/home/edward/Documents/SEPC/sepc-shell/src/ensishell.c" "/home/edward/Documents/SEPC/sepc-shell/build/CMakeFiles/ensishell.dir/src/ensishell.c.o"
-  "/home/edward/Documents/SEPC/sepc-shell/src/readcmd.c" "/home/edward/Documents/SEPC/sepc-shell/build/CMakeFiles/ensishell.dir/src/readcmd.c.o"
+  "/user/7/.base/rojascle/home/Documents/SEPC/sepc-shell/src/ensishell.c" "/user/7/.base/rojascle/home/Documents/SEPC/sepc-shell/build/CMakeFiles/ensishell.dir/src/ensishell.c.o"
+  "/user/7/.base/rojascle/home/Documents/SEPC/sepc-shell/src/readcmd.c" "/user/7/.base/rojascle/home/Documents/SEPC/sepc-shell/build/CMakeFiles/ensishell.dir/src/readcmd.c.o"
   )
 SET(CMAKE_C_COMPILER_ID "GNU")
 

@@ -18,3 +18,7 @@
 
 # emacs backup
 *~
+/build
+/nbproject
+*.cmake
+/CMakeFiles
