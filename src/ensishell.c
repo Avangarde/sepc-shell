@@ -11,6 +11,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 
 #include "variante.h"
@@ -22,7 +24,8 @@
 
 Liste processus;
 
-void lancerCommande (char ***seq, int bg) {
+//void lancerCommande (char ***seq, int bg) {
+void lancerCommande (struct cmdline * cmdl) {
 	//Variables PIPE
 	int tuyau[2];
 	//tuyau[0]: lire... ecrire sur l'autre
@@ -30,8 +33,8 @@ void lancerCommande (char ***seq, int bg) {
 
 	//Ici il manque le trc pour faire la lecture du pipe bien si nest pas selement le premier
 	int s;
-	for (s = 0; seq[s]!=0;s++){
-		char **commande = seq[s];
+	for (s = 0; cmdl->seq[s]!=0;s++){
+		char **commande = cmdl->seq[s];
 		if(strcmp(commande[0],"quit") == 0
 		   || strcmp(commande[0],"exit") == 0){
 			exit(0);
@@ -53,13 +56,51 @@ void lancerCommande (char ***seq, int bg) {
 					if(s==0){
 					
 					//Est-ce que je suis l'unique sequence
-					printf("Je suis lunique");
+					
+						if(cmdl->in != NULL){
+							//Traitement
+							//J'essai d'ouvrir le standard in en mode read-only
+							int stdIn;
+							if ((stdIn=open(cmdl->in,O_RDONLY))==-1){
+								//Traitement d'erreur:On ne peut pas ouvrir
+								perror("open:");
+								exit(1);
+						}
+						
+						dup2(stdIn,0);
+						if(close(stdIn)==-1){
+							//On ne peut pas le fermer
+							perror("close:");
+						}
+						}
+						
+						//Ici on doit regarder si on est l'unique commande ou s'il ya plusieurs
+						if(cmdl->seq[s+1 == 0]){
+							
+							if(cmdl->out != NULL){
+								int stdOut;
+								if((stdOut = open(cmdl->out, O_RDWR | O_CREAT))==-1){
+									perror("open:");
+									exit(1);
+								}
+								
+								dup2(stdOut,1);
+								if(close(stdOut)==-1){
+									perror("close:");
+								}
+							}
+							
+							
+						}else{
 					
 						dup2(tuyau[1],1);
 						//Attention, est qu'il faut fermer l'ecriture avant de fermer la lecture?
 						close(tuyau[0]);
 						close(tuyau[1]);
-					
+						
+						
+						
+						}
 					}
 					
 					
@@ -71,20 +112,34 @@ void lancerCommande (char ***seq, int bg) {
 						close(tuyau[0]);
 						close(tuyau[1]);
 					
-						//Gestion du fichier			
+						//Gestion du fichier	out
+						
+						if(cmdl->out != NULL){
+								int stdOut;
+								if((stdOut = open(cmdl->out, O_RDWR | O_CREAT))==-1){
+									perror("open:");
+									exit(1);
+								}
+								
+								dup2(stdOut,1);
+								if(close(stdOut)==-1){
+									perror("close:");
+								}
+							}		
 					}
 				
 					execvp(commande[0], commande);
 					perror("execvp:");
+					exit(0);
 					break;
 				default:
 				  { 
 					int status;
-					if (!bg){
+					if (!cmdl->bg){
 						waitpid(pid, &status, 0);
 					}else{
 						printf("Processus en tache de fond: %i\n", pid);
-						processus = ajouterAuFond(pid, seq[0], processus);
+						processus = ajouterAuFond(pid, cmdl->seq[s], processus);
 					}
 					break;
 				  }
@@ -135,7 +190,8 @@ int main() {
 			printf("\n");
 		}
 		
-		lancerCommande(l->seq, l->bg);
+		//lancerCommande(l->seq, l->bg);
+		lancerCommande(l);
 		
 	}
 	
