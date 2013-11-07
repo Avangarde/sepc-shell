@@ -365,12 +365,12 @@ error:
 }
 
 Liste visualiser (Liste L) {
+
 	if (estVide(L)) {
 		printf("Pas des processus en tâche de fond\n");
 		return NULL;
 	} else {
 		int i,j = 1;
-		pid_t pid;
 		Liste aux = calloc(1,sizeof(*aux));
 		Liste parcours = aux;
 		parcours->suivant = L;
@@ -379,8 +379,8 @@ Liste visualiser (Liste L) {
 			for (i=0; (parcours->suivant)->commande[i]!=0; i++) {
 				printf("%s ", (parcours->suivant)->commande[i]);
             }
-			pid = waitpid ((parcours->suivant)->pid, NULL, WNOHANG);
-			if (pid > 0) {
+			
+			if ((parcours->suivant)->etat > 0) {
 				printf("\tFini");
 				Liste delete = parcours->suivant;
 				parcours->suivant = parcours->suivant->suivant;
@@ -421,6 +421,8 @@ Liste ajouterAuFond(int pid, char **commande, Liste l){
 	nouvelleProc->commande = xmalloc(sizeof(char *));
 	nouvelleProc->commande[0] = 0;
 	nouvelleProc->suivant = NULL;
+        //est un processus nouveau
+        nouvelleProc->etat = 0;
 	
 	//commande
 	

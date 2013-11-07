@@ -43,7 +43,8 @@ When the user enters an empty line, seq[0] is NULL.
 typedef struct Liste{
     pid_t pid;
     char **commande;
-    struct Liste * suivant;         
+    struct Liste * suivant;    
+    int etat;
 } *Liste;
 
 Liste visualiser(Liste l);
