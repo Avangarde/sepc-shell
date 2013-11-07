@@ -365,32 +365,32 @@ error:
     return s;
 }
 
-Liste visualiser(Liste L) {
-    if (estVide(L)) {
-        printf("Pas des processus en tâche de fond\n");
-        return NULL;
-    } else {
-        int i, j = 1;
-        pid_t pid;
-        Liste aux = calloc(1, sizeof (*aux));
-        Liste parcours = aux;
-        parcours->suivant = L;
-        while (!estVide(parcours->suivant)) {
-            printf("[%i] \t %i \t", j, (parcours->suivant)->pid);
-            for (i = 0; (parcours->suivant)->commande[i] != 0; i++) {
-                printf("%s ", (parcours->suivant)->commande[i]);
+Liste visualiser (Liste L) {
+
+	if (estVide(L)) {
+		printf("Pas des processus en tâche de fond\n");
+		return NULL;
+	} else {
+		int i,j = 1;
+		Liste aux = calloc(1,sizeof(*aux));
+		Liste parcours = aux;
+		parcours->suivant = L;
+		while (!estVide(parcours->suivant)) {
+			printf("[%i] \t %i \t", j, (parcours->suivant)->pid);
+			for (i=0; (parcours->suivant)->commande[i]!=0; i++) {
+				printf("%s ", (parcours->suivant)->commande[i]);
             }
-            pid = waitpid((parcours->suivant)->pid, NULL, WNOHANG);
-            if (pid > 0) {
-                printf("\tFini");
-                Liste delete = parcours->suivant;
-                parcours->suivant = parcours->suivant->suivant;
-                eliminerDeListe(delete);
-                free(delete);
-            } else {
-                printf("\tEn cours d'exécution");
-                parcours = parcours->suivant;
-            }
+			
+			if ((parcours->suivant)->etat > 0) {
+				printf("\tFini");
+				Liste delete = parcours->suivant;
+				parcours->suivant = parcours->suivant->suivant;
+				eliminerDeListe(delete);
+				free(delete);
+			} else {
+				printf("\tEn cours d'exécution");
+				parcours = parcours->suivant;
+			}
             printf("\n");
             j++;
         }
@@ -416,22 +416,24 @@ int eliminerDeListe(Liste tache) {
     return 1;
 }
 
-Liste ajouterAuFond(int pid, char **commande, Liste l) {
-    Liste nouvelleProc = calloc(1, sizeof (*nouvelleProc));
-    nouvelleProc->pid = pid;
-    nouvelleProc->commande = xmalloc(sizeof (char *));
-    nouvelleProc->commande[0] = 0;
-    nouvelleProc->suivant = NULL;
-
-    //commande
-
-    size_t temp = 0;
-    int i;
-
-    for (i = 0; commande[i] != 0; i++) {
-        //nouvelleProc->commande = xrealloc(l->commande, (temp + 2) * sizeof(char *));
-        nouvelleProc->commande[temp] = xmalloc((strlen(commande[i]) + 1) * sizeof (char));
-        strcpy(nouvelleProc->commande[temp++], commande[i]);
+Liste ajouterAuFond(int pid, char **commande, Liste l){
+	Liste nouvelleProc = calloc(1,sizeof(*nouvelleProc));
+	nouvelleProc->pid = pid;
+	nouvelleProc->commande = xmalloc(sizeof(char *));
+	nouvelleProc->commande[0] = 0;
+	nouvelleProc->suivant = NULL;
+        //est un processus nouveau
+        nouvelleProc->etat = 0;
+	
+	//commande
+	
+	size_t temp = 0;
+	int i;
+	
+	for(i = 0; commande[i] != 0; i++){
+		//nouvelleProc->commande = xrealloc(l->commande, (temp + 2) * sizeof(char *));
+        nouvelleProc->commande[temp]= xmalloc( (strlen(commande[i])+1) * sizeof(char)); 
+        strcpy(nouvelleProc->commande[temp++],commande[i]);        
         nouvelleProc->commande[temp] = 0;
     }
 

@@ -24,9 +24,37 @@
 
 Liste processus;
 
-//void lancerCommande (char ***seq, int bg) {
+void asynchro(int signal) {
+    
+    Liste parcours = processus; 
+    pid_t pid;
+    
+    while (!estVide(parcours)) {
+        pid = waitpid (parcours->pid, NULL, WNOHANG);
+        if (pid >0){
+            //printf("Changement d'état de processus : %i\n", pid);
+            parcours->etat = 1;
+        }else{
+            
+        }
+        
+        parcours = parcours->suivant;
+        
+    }
+}
 
 void lancerCommande(struct cmdline * cmdl) {
+
+    // Morceau du code du sigaction
+    struct sigaction traitant = {};
+    traitant.sa_handler = asynchro;
+    sigemptyset(& traitant.sa_mask);
+    traitant.sa_flags = 0;
+    if (sigaction(SIGCHLD, &traitant, 0) == -1){
+        perror("sigaction:");
+    }
+
+
     //Variables PIPE
     int tuyau[2];
     int pids[2];
@@ -45,6 +73,8 @@ void lancerCommande(struct cmdline * cmdl) {
 
         if (strcmp(commande[0], "jobs") == 0) {
             processus = visualiser(processus);
+            
+            
         } else {
             pid_t pid;
             switch (pid = fork()) {
@@ -95,7 +125,7 @@ void lancerCommande(struct cmdline * cmdl) {
                             close(tuyau[0]);
 
                         }
-                    }                        //Est-ce que je suis la deuxieme sequence?
+                    }//Est-ce que je suis la deuxieme sequence?
 
                     else if (s == 1) {
 
