@@ -75,7 +75,7 @@ void lancerCommande(struct cmdline * cmdl) {
                         if (cmdl->seq[s + 1] == 0) {
                             if (cmdl->out != NULL) {
                                 int stdOut;
-                                if ((stdOut = open(cmdl->out, O_RDWR | O_CREAT)) == -1) {
+                                if ((stdOut = open(cmdl->out, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO)) == -1) {
                                     perror("open:");
                                     exit(1);
                                 }
@@ -95,8 +95,7 @@ void lancerCommande(struct cmdline * cmdl) {
                             close(tuyau[0]);
 
                         }
-                    }
-                        //Est-ce que je suis la deuxieme sequence?
+                    }                        //Est-ce que je suis la deuxieme sequence?
 
                     else if (s == 1) {
 
@@ -108,7 +107,7 @@ void lancerCommande(struct cmdline * cmdl) {
 
                         if (cmdl->out != NULL) {
                             int stdOut;
-                            if ((stdOut = open(cmdl->out, O_RDWR | O_CREAT)) == -1) {
+                            if ((stdOut = open(cmdl->out, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO)) == -1) {
                                 perror("open:");
                                 exit(1);
                             }
@@ -150,12 +149,24 @@ void lancerCommande(struct cmdline * cmdl) {
 
 }
 
+void montrerPipe(struct cmdline * cmdl) {
+    int i, j;
+    for (i = 0; cmdl->seq[i] != 0; i++) {
+        char **cmd = cmdl->seq[i];
+        printf("seq[%d]: ", i);
+        for (j = 0; cmd[j] != 0; j++) {
+            printf("'%s' ", cmd[j]);
+        }
+        printf("\n");
+    }
+
+}
+
 int main() {
     printf("Variante %d: %s\n", VARIANTE, VARIANTE_STRING);
 
     while (1) {
         struct cmdline *l;
-        int i, j;
         char *prompt = "ensishell>";
 
         l = readcmd(prompt);
@@ -177,14 +188,8 @@ int main() {
         if (l->bg) printf("background (&)\n");
 
         /* Display each command of the pipe */
-        for (i = 0; l->seq[i] != 0; i++) {
-            char **cmd = l->seq[i];
-            printf("seq[%d]: ", i);
-            for (j = 0; cmd[j] != 0; j++) {
-                printf("'%s' ", cmd[j]);
-            }
-            printf("\n");
-        }
+        montrerPipe(l);
+
 
         //lancerCommande(l->seq, l->bg);
         lancerCommande(l);
